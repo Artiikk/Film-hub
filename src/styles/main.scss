@@ -1,0 +1,168 @@
+@import 'libs';
+@import 'var';
+@import 'fonts';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-roboto;
+  margin: 0 auto;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.root {
+  height: 100%;
+  overflow: hidden;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+p {
+  margin: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $white;
+  opacity: 0.33;
+}
+
+.generator {
+  display: flex;
+  justify-content: center;
+
+  button {
+    font-size: 25px;
+    width: fit-content;
+  }
+}
+
+.main {
+  height: 100vh;
+  width: 100vw;
+  // background: url('../assets/cinema.jpg') center center / cover no-repeat;
+  
+  &-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .autocomplete {
+      position: absolute;
+      bottom: 25%;
+      left: 10%;
+
+      label {
+        color: $white;
+        margin-right: 20px;
+      }
+    }
+
+    .watch-button {
+      position: absolute;
+      bottom: 8%;
+      left: 10%;
+    }
+
+    .random-button {
+      position: absolute;
+      bottom: 15%;
+      left: 10%;
+    }
+
+    .bg-image {
+      width: 100%;
+      height: 100%;
+    }
+
+    .add-new-item {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+
+      input {
+        margin-right: 10px;
+      }
+    }
+
+    .films-container {
+      position: absolute;
+      top: 33%;
+      left: 25%;
+      transform: translate(-25%, -33%);
+      width: 45%;
+      height: 45%;
+      overflow-y: scroll;
+
+      .card.card-body {
+        display: flex;
+        cursor: pointer;
+        color: $white;
+        font-weight: 700;
+        font-size: 18px;
+        background: url('../assets/popcorn.jpg') no-repeat center / cover;
+        background-position-x: 70px;
+        background-position-y: 65%;
+        background-color: $black;
+        padding: 10px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+        }
+  
+        .trash {
+          fill: $red;
+        }
+
+        .eye {
+          fill: $green;
+          margin-right: 10px;
+        }
+
+        .label-section {
+          width: 100%;
+          .text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            width: 70%;
+          }
+        }
+      }
+    }
+  }
+}
+.parent {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.image1 {
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 1px red solid;
+}
+.image2 {
+  position: absolute;
+  left: 30px;
+  border: 1px green solid;
+}
+@import 'media';
