@@ -6,9 +6,10 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "build": "react-scripts build",
     "lambda-serve": "netlify-lambda serve functions",
     "lambda-build": "netlify-lambda build functions",
-    "build": "run-p build:**",
+    "build-all": "run-p build:**",
     "build:lambda": "netlify-lambda build lambda"
   },
   "dependencies": {
