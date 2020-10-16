@@ -2,7 +2,6 @@ import React from 'react'
 
 import { ReactComponent as TrashLogo } from '../../assets/trash-can.svg'
 import { ReactComponent as Eye } from '../../assets/eye.svg'
-import { ReactComponent as Arrow } from '../../assets/right-arrow.svg'
 import swal from '@sweetalert/with-react'
 
 const Films = ({ films, getFilm, deleteItem, markAsUnwatched }) => {
