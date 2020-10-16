@@ -19,11 +19,11 @@ const CustomAutocomplete = ({ label, filteredItems, value, onChange }) => {
       <label>{label}</label>
       <Autocomplete
         id='autocomplete'
-        getItemValue={(item) => item.label}
+        getItemValue={(item) => item.title}
         items={filteredItems}
         renderItem={(item, isHighlighted) => (
           <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-            {item.label}
+            {item.title}
           </div>)}
         menuStyle={style}
         value={value}

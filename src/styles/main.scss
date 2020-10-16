@@ -69,16 +69,17 @@ p {
     }
     
     .animated-arrow {
-      animation: 0.1s linear 0s infinite alternate arrowMove;
+      animation: 0.1s ease-in 0s infinite alternate arrowMove;
+      animation-delay: 0;
       top: 2%;
     }
 
     @keyframes arrowMove {
       from {
-        transform: rotate(-80deg);
+        transform: rotate(-10deg);
       }
       to {
-        transform: rotate(0deg);
+        transform: rotate(10deg);
       }
     }
 

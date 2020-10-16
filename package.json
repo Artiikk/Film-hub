@@ -2,6 +2,15 @@
   "name": "film-hub",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lambda-serve": "netlify-lambda serve functions",
+    "lambda-build": "netlify-lambda build functions",
+    "build": "run-p build:**",
+    "build:lambda": "netlify-lambda build lambda"
+  },
   "dependencies": {
     "@sweetalert/with-react": "^0.1.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -9,6 +18,10 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
+    "dotenv": "^8.2.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.9",
+    "netlify-lambda": "^2.0.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-autocomplete": "^1.8.1",
@@ -17,12 +30,6 @@
     "scroll-into-view": "^1.15.0",
     "sweetalert": "^2.1.2",
     "use-sound": "^1.0.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
