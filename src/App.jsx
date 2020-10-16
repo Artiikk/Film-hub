@@ -4,9 +4,13 @@ import Films from './components/Films'
 import filmData from './data/filmData'
 import swal from '@sweetalert/with-react'
 import cinemaBg from './assets/cinema.jpg'
+import { ReactComponent as Arrow } from './assets/right-arrow.svg'
 // import logo from './assets/film_hub.png'
 import CustomAutocomplete from './components/CustomAutocomplete'
 import scrollInto from 'scroll-into-view'
+
+import useSound from 'use-sound'
+import casinoSound from './sounds/casino.mp3'
 
 import './styles/main.scss'
 
@@ -15,6 +19,9 @@ function App() {
   const [searchValues, setSearchValues] = useState('')
   const [newFilmValue, setNewFilmValue] = useState('')
   const [showWatched, setShowWatched] = useState(false)
+  const [arrowAnimate, setShowArrowAnimate] = useState(false)
+
+  const [playOn, { stop }] = useSound(casinoSound);
 
   const filteredFilms = films.filter(el => el.label.toLowerCase().includes(searchValues.toLocaleLowerCase()))
   const watchedOnly = filteredFilms.filter(el => Boolean(el.watched))
@@ -37,7 +44,6 @@ function App() {
     if (value === 'watch') {
       window.open(`https://www.google.com.ua/search?q=${label}&oq=${label}`, '_blank')
       markAsWatched(label)
-      swal(`Film "${label}" marked as watched!`, '', 'success')
     }
     if (value === 'watched') {
       markAsWatched(label)
@@ -46,10 +52,16 @@ function App() {
   }
 
   const getRandomFilm = () => {
+    setShowArrowAnimate(true)
+    playOn()
     const random = Math.round(Math.random() * films.length)
     const currentLabel = films[random].label
     const currentElement = document.getElementById(currentLabel)
-    scrollInto(currentElement, { time: 1100 }, () => showModal(currentLabel))
+    scrollInto(currentElement, { time: 1500 }, () => {
+      setShowArrowAnimate(false)
+      stop()
+      showModal(currentLabel)
+    })
   }
 
   const getFilm = ({ label }) => showModal(label)
@@ -101,6 +113,8 @@ function App() {
 
       <section className='main-section'>
         <img src={cinemaBg} className='bg-image' alt='' />
+        <Arrow className={`arrow ${arrowAnimate && 'animated-arrow'}`} />
+        
         <CustomAutocomplete
           label='Search for films:'
           filteredItems={filmsToShow}
