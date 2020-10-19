@@ -4,7 +4,7 @@ const Films = require('../models/Films');
 const db = require('./server.js');
 
 exports.handler = function(event, context, callback) {
-context.callbackWaitsForEmptyEventLoop = false;
+  context.callbackWaitsForEmptyEventLoop = false;
   const { id, watched } = JSON.parse(event.body);
 
   const handleWatched = async () => {
@@ -18,7 +18,9 @@ context.callbackWaitsForEmptyEventLoop = false;
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+          'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
         },
         body: JSON.stringify(response)
       });

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Films from './components/Films'
 
-import swal from '@sweetalert/with-react'
 import cinemaBg from './assets/cinema.jpg'
 import { ReactComponent as Arrow } from './assets/right-arrow.svg'
 import CustomAutocomplete from './components/CustomAutocomplete'
 import scrollInto from 'scroll-into-view'
 import { AxiosAPI } from './restClient'
+import { Line } from 'rc-progress'
 
 import useSound from 'use-sound'
 import casinoSound from './sounds/casino.mp3'
@@ -18,16 +18,15 @@ function App() {
   const [searchValues, setSearchValues] = useState('')
   const [newFilmValue, setNewFilmValue] = useState('')
   const [showWatched, setShowWatched] = useState(false)
-  const [arrowAnimate, setShowArrowAnimate] = useState(false)
+  const [watchedPercent, setWatchedPercent] = useState('')
 
   const [playOn, { stop }] = useSound(casinoSound)
-
-  console.log('films', films)
   
   useEffect(() => {
     (async () => {
       const { data } = await AxiosAPI.get('getFilms')
-      setFilms(data)
+      const sortedData = data.sort((a, b) => a.title.localeCompare(b.title))
+      setFilms(sortedData)
     })()
   }, [])
 
@@ -36,42 +35,23 @@ function App() {
 
   const filmsToShow = showWatched ? watchedOnly : filteredFilms
 
-  const showModal = async (label) => {
-    const buttonsObj = {
-      buttons: {
-        read: { text: 'Mark as watched', value: 'watched' },
-        random: { text: 'Go random', value: 'random' },
-        watch: { text: 'Go for it!', value: 'watch' }
-      }
-    }
-    
-    const value = await swal(label, buttonsObj)
-    if (value === 'random') {
-      getRandomFilm()
-    }
-    if (value === 'watch') {
-      window.open(`https://www.google.com.ua/search?q=${label}&oq=${label}`, '_blank')
-    }
-    if (value === 'watched') {
-      watchHandler(label, true)
-      swal(`Film "${label}" marked as watched!`, '', 'success')
-    }
+  const calculateWatched = () => {
+    const watchedFilms = films.filter(el => Boolean(el.watched))
+    return (watchedFilms.length / films.length) * 100
   }
+
+  useEffect(() => {
+    const watchPercent = calculateWatched()
+    watchPercent && setWatchedPercent(watchPercent.toFixed(1))
+  }, [films])
 
   const getRandomFilm = () => {
-    setShowArrowAnimate(true)
     playOn()
     const random = Math.round(Math.random() * films.length)
-    const currentTitle = films[random].title
+    const currentTitle = films[random] && films[random].title
     const currentElement = document.getElementById(currentTitle)
-    scrollInto(currentElement, { time: 1800 }, () => {
-      setShowArrowAnimate(false)
-      stop()
-      showModal(currentTitle)
-    })
+    scrollInto(currentElement, { time: 1800 }, () => stop())
   }
-
-  const getFilm = ({ title }) => showModal(title)
 
   const addNewFilm = async (e) => {
     e.preventDefault()
@@ -117,29 +97,36 @@ function App() {
 
       <section className='main-section'>
         <img src={cinemaBg} className='bg-image' alt='' />
-        <Arrow className={`arrow ${arrowAnimate && 'animated-arrow'}`} />
+        <Arrow className='arrow' />
+        <div className='watched-percent'>
+          {watchedPercent && <Line percent={watchedPercent} className='line' strokeWidth='2' trailWidth='2' strokeColor="#90ee90" />}
+          <p>{watchedPercent}{watchedPercent && '%'}</p>
+        </div>
         
-        <CustomAutocomplete
-          label='Search for films:'
-          filteredItems={filmsToShow}
-          value={searchValues}
-          onChange={setSearchValues}
-        />
-        <button className="watch-button btn btn-info"  onClick={() => setShowWatched(prev => !prev)}>
-          {showWatched ? 'Show all' : 'Show watched'}
+        <div className='default-items'>
+          <div className='d-flex'>
+            <CustomAutocomplete
+              label='Search for films:'
+              filteredItems={filmsToShow}
+              value={searchValues}
+              onChange={setSearchValues}
+            />
+            <button onClick={getRandomFilm} className='random-button btn btn-secondary'>Random</button>
+          </div>
+
+          <form className='add-new-item' onSubmit={addNewFilm}>
+            <input type='text' value={newFilmValue} onChange={(e) => setNewFilmValue(e.target.value)} />
+            <button type='submit' onClick={addNewFilm} className='btn btn-primary'>Add new film</button>
+          </form>
+        </div>
+        <button className='btn btn-info button-watched' onClick={() => setShowWatched(prev => !prev)}>
+          {showWatched ? 'Show all' : 'Show watched only'}
         </button>
-        <button onClick={getRandomFilm} className='random-button btn btn-primary ml-auto mr-auto'>Random</button>
         <Films
           films={filmsToShow}
-          getFilm={getFilm}
           deleteItem={deleteItem}
           watchHandler={watchHandler}
         />
-
-        <form className='add-new-item' onSubmit={addNewFilm}>
-          <input type='text' value={newFilmValue} onChange={(e) => setNewFilmValue(e.target.value)} />
-          <button type='submit' onClick={addNewFilm} className='btn btn-primary'>Add new film</button>
-        </form>
       </section>
     </div>
   );

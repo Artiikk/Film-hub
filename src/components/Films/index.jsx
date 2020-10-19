@@ -1,10 +1,12 @@
 import React from 'react'
 
-import { ReactComponent as TrashLogo } from '../../assets/trash-can.svg'
+import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list'
 import { ReactComponent as Eye } from '../../assets/eye.svg'
 import swal from '@sweetalert/with-react'
 
-const Films = ({ films, getFilm, deleteItem, watchHandler }) => {
+import '@sandstreamdev/react-swipeable-list/dist/styles.css'
+
+const Films = ({ films, deleteItem, watchHandler }) => {
   const deleteHandler = async ({ title }) => {
     const buttonsObj = { buttons: { cancel: 'No', confirm: { text: 'Delete', value: 'confirm' } }}
     const value = await swal(`Are you sure you want delete "${title}"?`, buttonsObj)
@@ -14,31 +16,46 @@ const Films = ({ films, getFilm, deleteItem, watchHandler }) => {
     }
   }
 
-  const unwatchedHandler = async ({ title }) => {
+  const mainWatchHandler = async ({ title }, isWatched) => {
     const buttonsObj = { buttons: { cancel: 'No', confirm: { text: 'Yes', value: 'confirm' } }}
-    const value = await swal(`Mark "${title}" as not watched?`, buttonsObj)
+    const currentArticle = !isWatched ? 'not' : ''
+    const value = await swal(`Mark "${title}" as ${currentArticle} watched?`, buttonsObj)
     if (value === 'confirm') {
-      watchHandler(title, false)
-      swal(`Film "${title}" marked as not watched!`, '', 'success')
+      watchHandler(title, isWatched)
+      swal(`Film "${title}" marked as ${currentArticle} watched!`, '', 'success')
     }
   }
 
+  const getFilm = ({ title }) => window.open(`https://www.google.com.ua/search?q=${title}&oq=${title}`, '_blank')
+
   return (
-    <ul className='films-container'>
-      {films.map((film, id) => (
-        <li id={film.title} key={`${film.title}${id}`} className='card card-body mt-3 mb-3'>
-          <ul className='d-flex align-items-center'>
-            <li className='d-flex'>
-              <TrashLogo className='trash' onClick={() => deleteHandler(film)} />
-              {film.watched && <Eye className='eye' onClick={() => unwatchedHandler(film)} />}
-            </li>
-            <li className='label-section' onClick={() => getFilm(film)}>
-              <span className='text'>{film.title}</span>
-            </li>
-          </ul>
-        </li>
-      ))}
-    </ul>
+    <div className='films-container'>
+      <SwipeableList>
+        {films.map((film, id) => (
+          <div id={film.title} className='card card-body mt-3 mb-3' key={`${film.title}${id}`}>
+            <SwipeableListItem
+              swipeRight={{
+                content: <div className='deleteContent'>Going to be deleted...</div>,
+                action: () => deleteHandler(film)
+              }}
+            >
+            <div className='d-flex align-items-center w100 p10'>
+              <div className='d-flex'>
+                {film.watched ? (
+                  <Eye className='eye' onClick={() => mainWatchHandler(film, false)} />
+                ) : (
+                  <Eye className='eye-not-watched' onClick={() => mainWatchHandler(film, true)} />
+                )}
+              </div>
+              <div className='label-section' onClick={() => getFilm(film)}>
+                <span className='text'>{film.title}</span>
+              </div>
+            </div>
+          </SwipeableListItem>
+        </div>
+        ))}
+      </SwipeableList>
+    </div>
   )
 }
 
