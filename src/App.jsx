@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     const watchPercent = calculateWatched()
     watchPercent && setWatchedPercent(watchPercent.toFixed(1))
-  }, [films])
+  }, [films]) //eslint-disable-line
 
   const getRandomFilm = () => {
     playOn()
