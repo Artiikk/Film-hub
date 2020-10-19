@@ -100,7 +100,7 @@ function App() {
         <Arrow className='arrow' />
         <div className='watched-percent'>
           {watchedPercent && <Line percent={watchedPercent} className='line' strokeWidth='2' trailWidth='2' strokeColor="#90ee90" />}
-          <p>{`${watchedFilms.length} / ${films.length}`}</p>
+          {!!films.length && <p>{`${watchedFilms.length} / ${films.length}`}</p>}
         </div>
         
         <div className='default-items'>
