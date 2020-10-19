@@ -21,7 +21,6 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
     "dotenv": "^8.2.0",
-    "http-proxy-middleware": "^1.22.10",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.9",
     "netlify-lambda": "^2.0.1",
