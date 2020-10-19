@@ -35,8 +35,8 @@ function App() {
 
   const filmsToShow = showWatched ? watchedOnly : filteredFilms
 
+  const watchedFilms = films.filter(el => Boolean(el.watched))
   const calculateWatched = () => {
-    const watchedFilms = films.filter(el => Boolean(el.watched))
     return (watchedFilms.length / films.length) * 100
   }
 
@@ -100,7 +100,7 @@ function App() {
         <Arrow className='arrow' />
         <div className='watched-percent'>
           {watchedPercent && <Line percent={watchedPercent} className='line' strokeWidth='2' trailWidth='2' strokeColor="#90ee90" />}
-          <p>{watchedPercent}{watchedPercent && '%'}</p>
+          <p>{watchedFilms.length / films.length}</p>
         </div>
         
         <div className='default-items'>
